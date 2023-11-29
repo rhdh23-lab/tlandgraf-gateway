@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tlandgraf-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: tlandgraf-poi-gateway-app-dev
+    backstage.io/kubernetes-id: tlandgraf-poi-gateway-app
+    backstage.io/kubernetes-namespace: tlandgraf
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh23-lab/tlandgraf-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.rosa-m9x67.dusy.p1.openshiftapps.com/dev-pipelines/ns/tlandgraf/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.rosa-m9x67.dusy.p1.openshiftapps.com/k8s/ns/tlandgraf/deployments/tlandgraf-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.rosa-m9x67.dusy.p1.openshiftapps.com/#https://github.com/rhdh23-lab/tlandgraf-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/tobiaslandgrafprofi"
+  system: workshop-system-tlandgraf
+  providesApis:
+    - gateway-api-tlandgraf
+  consumesApis:
+    - backend-api-tlandgraf
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-tlandgraf
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/tobiaslandgrafprofi"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-tlandgraf
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://tlandgraf-poi-gateway-app-tlandgraf.apps.rosa-m9x67.dusy.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh23-lab/tlandgraf-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/tobiaslandgrafprofi"
+  system: workshop-system-tlandgraf
+  definition:
+    $text: https://github.com/rhdh23-lab/tlandgraf-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
